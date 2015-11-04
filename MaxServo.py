@@ -7,9 +7,11 @@ test_servo = Servo.Robotis_Servo( dyn, 1 )
 test_servo.init_cont_turn()
 #test_servo.kill_cont_turn()
 
+vel = 0.2
+
 while True:
-    test_servo.set_angvel(3)
-    time.sleep(3)
-    test_servo.set_angvel(-3)
-    time.sleep(3)   
-    
+    vel = vel * -1
+    test_servo.set_angvel(vel)
+    for x in range(0, 5) :
+        print test_servo.read_angle()
+        time.sleep(1)
