@@ -1,13 +1,13 @@
 import Servo
 import time
 
-dyn = Servo.USB2Dynamixel_Device( 'COM26', 57600 )
+dyn = Servo.USB2Dynamixel_Device( '/dev/ttyUSB0', 57600 )
 test_servo = Servo.Robotis_Servo( dyn, 1 )
 
 test_servo.init_cont_turn()
 #test_servo.kill_cont_turn()
 
-vel = 0.2
+vel = 2.0
 
 while True:
     vel = vel * -1
