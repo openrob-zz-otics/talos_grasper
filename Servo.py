@@ -71,12 +71,10 @@ class USB2Dynamixel_Device():
 
     def _open_serial(self, baudrate):
         try:
-            self.servo_dev = serial.Serial(self.dev_name, baudrate, timeout=1.0)
+            self.servo_dev = serial.Serial(self.dev_name, baudrate, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE, timeout=1.0)
             # Closing the device first seems to prevent "Access Denied" errors on WinXP
             # (Conversations with Brian Wu @ MIT on 6/23/2010)
-            self.servo_dev.close()  
-            self.servo_dev.setParity('N')
-            self.servo_dev.setStopbits(1)
+            self.servo_dev.close()
             self.servo_dev.open()
 
             self.servo_dev.flushOutput()
@@ -383,7 +381,7 @@ def find_servos(dyn):
     ''' Finds all servo IDs on the USB2Dynamixel '''
     print 'Scanning for Servos.'
     servos = []
-    dyn.servo_dev.setTimeout( 0.03 ) # To make the scan faster
+    dyn.servo_dev.timeout = 0.1 # To make the scan faster
     for i in xrange(254):
         try:
             s = Robotis_Servo( dyn, i )
@@ -391,7 +389,7 @@ def find_servos(dyn):
             servos.append( i )
         except:
             pass
-    dyn.servo_dev.setTimeout( 1.0 ) # Restore to original
+    dyn.servo_dev.timeout = 1.00 # Restore to original
     return servos
 
 

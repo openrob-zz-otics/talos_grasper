@@ -9,7 +9,7 @@ import os
 #sys.stdout.write("Choose the dev_name for Arm Servo: ")
 #dev_name = raw_input()
 
-dyn = USB2Dynamixel_Device("/dev/tty.usbserial-AH01FOYT", 1000000)
+dyn = USB2Dynamixel_Device("/dev/ttyUSB0", 57600)
 
 print find_servos(dyn)
 #recover_servo(dyn)
