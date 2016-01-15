@@ -7,7 +7,7 @@ test_servo = Servo.Robotis_Servo( dyn, 1 )
 test_servo.init_cont_turn()
 #test_servo.kill_cont_turn()
 
-vel = 0.2
+vel = 1
 
 while True:
     vel = vel * -1
