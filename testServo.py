@@ -21,9 +21,9 @@ serv_5 = Robotis_Servo(dyn ,5)
 sleeptime = 5
 speed = 2
 
-serv_5.set_angvel(0.8)
-serv_5.set_cw_limit(1)
-serv_5.set_ccw_limit(4095)
+serv_5.set_angvel(0.5)
+serv_5.set_cw_limit(800)
+serv_5.set_ccw_limit(2800)
 print "Elbow encoder " + str(serv_5.read_encoder())
 
 serv_2.set_angvel(0.5)
@@ -35,8 +35,9 @@ print "Multi-turn offset" + str(serv_2.read_multi_offset())
 print "Enter servo value: "
 keys_in = raw_input()
 while(str(keys_in) != 'q'):
-	#serv_2.move_to_encoder(int(keys_in))
-	serv_2.set_multi_offset(0)#int(keys_in))
+	serv_2.move_to_encoder(int(keys_in))
+	#serv_2.set_multi_offset(0)#int(keys_in))
+	serv_5.move_to_encoder((1800 - int(keys_in)) / 2 + 1800)
 	keys_in = raw_input()
 
 #print serv.recieve_reply()
