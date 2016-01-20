@@ -41,7 +41,7 @@ import string
 class USB2Dynamixel_Device():
     ''' Class that manages serial port contention between servos on same bus
     '''
-    def __init__(self, dev_name = '/dev/ttyUSB0', baudrate = 57600):
+    def __init__(self, dev_name='/dev/ttyUSB0', baudrate=57600):
         try:
             self.dev_name = string.atoi( dev_name ) # stores the serial port as 0-based integer for Windows
         except:
@@ -71,7 +71,7 @@ class USB2Dynamixel_Device():
 
     def _open_serial(self, baudrate):
         try:
-            self.servo_dev = serial.Serial(self.dev_name, baudrate, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE, timeout=1.0)
+            self.servo_dev = serial.Serial('COM26', baudrate, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE, timeout=1.0)
             # Closing the device first seems to prevent "Access Denied" errors on WinXP
             # (Conversations with Brian Wu @ MIT on 6/23/2010)
             self.servo_dev.close()
@@ -314,6 +314,26 @@ class Robotis_Servo():
         chksum = ( ~chksum ) % 256
         return chksum
 
+    def set_cw_limit(self, cw_limit):
+        ''' set the clockwise servo limit
+        '''
+        self.write_address(0x06, [cw_limit % 256, cw_limit / 256])
+
+    def set_ccw_limit(self, ccw_limit):
+        ''' set the counterclockwise servo limit
+        '''
+        self.write_address(0x08, [ccw_limit % 256, ccw_limit / 256])
+
+    def read_multi_offset(self):
+        ''' gets the offset in multi-turn mode
+        '''
+        return self.read_address(0x14, 2)
+
+    def set_multi_offset(self, offset):
+        ''' sets the offset in multi-turn mode
+        '''
+        self.write_address(0x14, [offset % 256, offset / 256])
+
     def read_address(self, address, nBytes=1):
         ''' reads nBytes from address on the servo.
             returns [n1,n2 ...] (list of parameters)
@@ -381,7 +401,7 @@ def find_servos(dyn):
     ''' Finds all servo IDs on the USB2Dynamixel '''
     print 'Scanning for Servos.'
     servos = []
-    dyn.servo_dev.timeout = 0.1 # To make the scan faster
+    dyn.servo_dev.timeout = 0.03 # To make the scan faster
     for i in xrange(254):
         try:
             s = Robotis_Servo( dyn, i )
